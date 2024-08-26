@@ -1,1 +1,1 @@
-this is the repository for the Dissertation project at Queen mary University london
+this is the repository for the Dissertation project at Queen mary University london, the project being DESIGN AND DEVELOPMENT OF A FORCE HAPTIC FEEDBACK DATA GLOVE FOR ENHANCED PROFESSIONAL TRAINING SIMULATIONS.
