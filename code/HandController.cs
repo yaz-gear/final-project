@@ -1,13 +1,13 @@
 using System.IO.Ports;
 using UnityEngine;
-using System;  // This is necessary for using Array and other System functions
+using System; 
 
 public class HandController : MonoBehaviour
 {
-    public string portName = "COM3";  // The COM port your Arduino is connected to
-    public int baudRate = 115200;     // Matching the baud rate set in your Arduino sketch
+    public string portName = "COM3";  // The COM port the ESP32 is connected to
+    public int baudRate = 115200;     // Matching the baud rate set in the ESP32 code
 
-    private SerialPort stream;        // Serial port object for communication
+    private SerialPort stream;        
     public GameObject[] indexFingerJoints;  // Array to hold joints for the index finger
     public GameObject[] middleFingerJoints; // Array to hold joints for the middle finger
     public GameObject[] ringFingerJoints;   // Array to hold joints for the ring finger
@@ -16,12 +16,12 @@ public class HandController : MonoBehaviour
     public GameObject wrist;                // GameObject for the wrist control
 
     private int[] potentiometerValues = new int[5];  // Array to store potentiometer values for each finger
-    private int[] potentiometerOffsets = { 0, 0, 0, 0, 0 };  // Offset for each potentiometer
+    private int[] potentiometerOffsets = { 0, 0, 0, 0, 0 };  // Offset for each potentiometer based on the calibration that is conducted
     private float yaw, pitch, roll;                  // Variables to hold Yaw, Pitch, and Roll data
-    private float yawOffset = -180.0f;  // Offset for yaw
-    private float pitchOffset = -90.0f;  // Offset for pitch
-    private float rollOffset = -180.0f;  // Offset for roll
-    private Vector3 acceleration;                    // Vector3 to hold acceleration data for wrist position
+    private float yawOffset = -180.0f;  // Offset for yaw based on calibration
+    private float pitchOffset = -90.0f;  // Offset for pitch based on calibration
+    private float rollOffset = -180.0f;  // Offset for roll based on calibration
+    private Vector3 acceleration;        // Vector3 to hold acceleration data for wrist position
 
     void Start()
     {
@@ -30,13 +30,13 @@ public class HandController : MonoBehaviour
         {
             try
             {
-                stream.Open();  // Attempt to open the serial port
+                stream.Open();  // open the serial port
                 stream.ReadTimeout = 50;
-                Debug.Log("Serial port opened successfully.");
+                Debug.Log("Serial port opened successfully."); // debugging message to ensure connection
             }
             catch (System.Exception e)
             {
-                Debug.LogError("Failed to open serial port: " + e.Message);
+                Debug.LogError("Failed to open serial port: " + e.Message); // debugging message to ensure connection
             }
         }
     }
@@ -53,7 +53,7 @@ public class HandController : MonoBehaviour
             }
             catch (System.TimeoutException)
             {
-                // Handle timeout exceptions quietly
+                
             }
             catch (System.Exception e)
             {
