@@ -1,5 +1,6 @@
 using System.IO.Ports;
 using UnityEngine;
+using System;  // This is necessary for using Array and other System functions
 
 public class HandController : MonoBehaviour
 {
@@ -119,19 +120,17 @@ public class HandController : MonoBehaviour
     {
         return 1.0f - (1 / (float)totalJoints);  // Simplified to affect all joints evenly
     }
+
     void OnCollisionEnter(Collision collision)
     {
-        // Determine which finger collided and send command to Arduino
         foreach (GameObject[] fingerJoints in new GameObject[][] { indexFingerJoints, middleFingerJoints, ringFingerJoints, pinkyFingerJoints, thumbJoints })
         {
-            foreach (GameObject joint in fingerJoints)
+            for (int i = 0; i < fingerJoints.Length; i++)
             {
-                if (collision.gameObject == joint)
+                if (collision.collider.gameObject == fingerJoints[i])
                 {
-                    // Determine the finger index based on the joint array
-                    int fingerIndex = Array.IndexOf(new GameObject[][] { indexFingerJoints, middleFingerJoints, ringFingerJoints, pinkyFingerJoints, thumbJoints }, fingerJoints) + 1;
-                    float angle = joint.transform.localEulerAngles.x; // Get the current angle of the joint
-                    SendServoCommand(fingerIndex, Mathf.RoundToInt(angle)); // Send command to Arduino
+                    float angle = fingerJoints[i].transform.localEulerAngles.x; // Get the current angle of the joint
+                    SendServoCommand(i + 1, Mathf.RoundToInt(angle)); // Send command to Arduino
                     break;
                 }
             }
@@ -145,6 +144,7 @@ public class HandController : MonoBehaviour
             stream.WriteLine($"{servoID},{angle}"); // Send servo ID and angle in the format "servoID,angle"
         }
     }
+
     void OnDestroy()
     {
         if (stream != null && stream.IsOpen)
