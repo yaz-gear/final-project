@@ -3,7 +3,7 @@
 #include <Wire.h>
 #include <I2Cdev.h>
 #include <MPU6050_6Axis_MotionApps20.h>
-
+// this is initializing and defining everything
 Servo servo1, servo2, servo3, servo4, servo5;
 
 const int potPin1 = 34, potPin2 = 35, potPin3 = 32, potPin4 = 33, potPin5 = 25;
@@ -29,23 +29,23 @@ void setup() {
   servo4.attach(servoPin4);
   servo5.attach(servoPin5);
 
-  // Initialize all servos to zero degrees
-  servo1.write(90);
-  servo2.write(90);
-  servo3.write(90);
-  servo4.write(90);
-  servo5.write(90);
+  // Initialize to the position that is optimal based on calibration
+  servo1.write(0);
+  servo2.write(0);
+  servo3.write(0);
+  servo4.write(0);
+  servo5.write(0);
 
   mpu.initialize();
   if (mpu.dmpInitialize() == 0) {
     mpu.setDMPEnabled(true);
-    mpu.setFullScaleAccelRange(MPU6050_ACCEL_FS_2);  // Set accelerometer sensitivity to ±2g
+    mpu.setFullScaleAccelRange(MPU6050_ACCEL_FS_2);  // Set accelerometer sensitivity to ±2g as this has shown the best results
     dmpReady = true;
     packetSize = mpu.dmpGetFIFOPacketSize();
     Serial.println("DMP enabled");
   } else {
     Serial.println("DMP Initialization failed");
-    while (1);  // Infinite loop to indicate failure
+    while (1);  
   }
 }
 
@@ -80,7 +80,7 @@ void loop() {
       float ay = accel.y / 16384.0;
       float az = accel.z / 16384.0;
 
-      // Send all the data formatted correctly
+      // Send all the data to unity
       Serial.print(val1); Serial.print(",");
       Serial.print(val2); Serial.print(",");
       Serial.print(val3); Serial.print(",");
